@@ -272,6 +272,7 @@ function Invoke-Query {
             $cmd.ExecuteScalar()
         } else {
             $dr = $cmd.ExecuteReader()
+            $out = @()
             $fc = $dr.FieldCount
             
             $fields = 0..($fc - 1) | foreach { $dr.GetName($_) }
@@ -281,8 +282,10 @@ function Invoke-Query {
                 $fields | foreach {
                     $row[$_] = $dr[$_]
                 }
-                $row
+                $out += $row
             }
+            
+            $out
         }
     } catch {
         Write-Host "Could not invoke command:"
